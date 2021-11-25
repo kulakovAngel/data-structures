@@ -2,7 +2,7 @@ export namespace LinkedList {
     type TNode<T> = INode<T> | null;
 
     interface INode<T> {
-        setNext(next: INode<T>): void;
+        setNext(next: TNode<T>): void;
         getNext(): TNode<T>;
         getData(): T;
     }
@@ -12,7 +12,7 @@ export namespace LinkedList {
     
         constructor(private data: T) {};
     
-        public setNext(next: INode<T>) {
+        public setNext(next: TNode<T>) {
             this.next = next;
         };
     
@@ -42,5 +42,52 @@ export namespace LinkedList {
                 this.last = newNode;
             }
         };
+
+        // TODO: set the "viewer callback";
+        public view() {
+            let current: TNode<T> = this.root;
+            while (current) {
+                const data: T = current.getData();
+                console.log('Current node data: ', data)
+                current = current.getNext();
+            }
+        }
+
+        public add(data: T, afterNode: T) {
+            let current: TNode<T> = this.root;
+            while (current) {
+                const currentData: T = current.getData();
+
+                if (afterNode === currentData) {
+                    const newNode: TNode<T> = new Node<T>(data);
+                    const next = current.getNext();
+
+                    newNode.setNext(next);
+                    current.setNext(newNode);
+
+                    break;
+                }
+
+                current = current.getNext();
+            }
+        }
+
+        // TODO: unify with add and view;
+        public delete(dataToDelete: T) {
+            let current: TNode<T> = this.root;
+            while (current) {
+                const next = current.getNext();
+
+                if (dataToDelete === next?.getData()) {
+                    if (next) {
+                        const nextNext = next.getNext();
+                        current.setNext(nextNext);
+                    }
+                    break;
+                }
+
+                current = current.getNext();
+            }
+        }
     }
 }
